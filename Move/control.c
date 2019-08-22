@@ -6,7 +6,6 @@
 // DC motor
 #define MOTOR_COUNT 2
 #define SPEED 60
-#define PARKING_SPEED 50
 
 // servo motor
 #define SERVO_PIN 1			// BCM 18
