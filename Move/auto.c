@@ -1,18 +1,27 @@
+//
+// Created by Hwiyong on 2019-08-23.
+//
+
+// gcc -o auto.o auto.c dc_motor.c servo_motor.c ultrasonic.c bluetooth.c -lwiringPi -lpthread -lbluetooth
+
 #include <stdio.h>
+#include <stdlib.h>
 #include "dc_motor.h"
 #include "servo_motor.h"
 #include "ultrasonic.h"
-//#include "gyro_accel.h"
-//#include "audio.h"
+#include "bluetooth.h"
 
 // DC motor
 #define MOTOR_COUNT 2
-#define SPEED 60
+#define INIT_SPEED 60
+#define SPEED_GAP 5
 #define PARKING_SPEED 50
+#define SPEED_LIMIT 100
 
 // servo motor
 #define SERVO_PIN 1			// BCM 18
-#define ANGLE_LIMIT 20
+#define ANGLE_LIMIT 70
+#define ANGLE_GAP 5
 #define MID_ANGLE 100
 
 // ultrasonic
@@ -30,23 +39,25 @@
 #define ULTRASONIC_BACK_RIGHT_TRIG 5	    // BCM 24
 #define ULTRASONIC_BACK_RIGHT_ECHO 4	    // BCM 23
 
-#define WORK_SECOND 20
-
-void autonomousDriving(int workSecond);
+void *function(void *argument);
+void autonomousDriving(int forward, int right);
 void setHandle(int angle);
 void goForward(int speed);
 void goBack(int speed);
+void setSpeed(int speed);
 void stop();
 void workUltrasonic();
 
 void parallelParking(int mode);
 void parking(int isParallel);
 
+int speed = INIT_SPEED;
+int angle = MID_ANGLE;
 int motor[MOTOR_COUNT] = {0, };
 int ultrasonicDistance[ULTRASONIC_COUNT] = {0, };
 
 int main() {
-    int i, angle = MID_ANGLE;
+    int i;
 
     // mapping BCM to wpi
     if(wiringPiSetup() == -1) {
@@ -71,41 +82,90 @@ int main() {
     initUltrasonic(ULTRASONIC_BACK_CENTER_TRIG, ULTRASONIC_BACK_CENTER_ECHO);
     initUltrasonic(ULTRASONIC_BACK_RIGHT_TRIG, ULTRASONIC_BACK_RIGHT_ECHO);
 
-    printf("Auto Driving~\n");
-    autonomousDriving(WORK_SECOND);
-    parallelParking(1);
+    bluetoothConnect(function);
     return 0;
 }
 
-void autonomousDriving(int workSecond) {
-    while(workSecond > 0) {
-        workUltrasonic();
-        goForward(SPEED);
-        sleep(5);
-        workSecond -= 5;
-        goBack(SPEED);
-        sleep(5);
-        workSecond -= 5;
+void *function(void *argument) {
+    char buf[1024];
+    char key;
+
+    pthread_detach(pthread_self());
+    int client = (int)argument;
+    int autoMode = 1;
+    while(1) {
+        char *recv_message = read_server(client);
+        if ( recv_message == NULL ) {
+            printf("client disconnected\n");
+            break;
+        }
+        key = recv_message[0];
+        if(key == 'm')
+            autoMode ^= 1;
+        else if(autoMode == 1) {
+            int forwardValue, rightValue;
+            char *ptr = strtok(recv_message, ",");
+            while (ptr != NULL) {
+                printf("%s\n", ptr);
+                ptr = strtok(NULL, " ");
+            }
+            // 자동 모드 알고리즘 추가
+            //autonomousDriving(forwardValue, rightValue);
+        }
+        else if(autoMode == 0){
+            if (key == 'p') {
+                speed = speed + SPEED_GAP > SPEED_LIMIT ? SPEED_LIMIT : speed + SPEED_GAP;
+                setSpeed(speed);
+            } else if (key == 'o') {
+                speed = speed - SPEED_GAP < 0 ? 0 : speed - SPEED_GAP;
+                setSpeed(speed);
+            } else if (key == 'w') {
+                goForward(speed);
+            } else if (key == 's') {
+                goBack(speed);
+            } else if (key == 'a') {
+                angle = angle - ANGLE_GAP > MID_ANGLE - ANGLE_LIMIT ? angle - ANGLE_GAP : MID_ANGLE - ANGLE_LIMIT;
+                setHandle(angle);
+            } else if (key == 'd') {
+                angle = angle + ANGLE_GAP < MID_ANGLE + ANGLE_LIMIT ? angle + ANGLE_GAP : MID_ANGLE + ANGLE_LIMIT;
+                setHandle(angle);
+            } else if (key == 'q') {
+                stop();
+                break;
+            }
+        }
     }
+    //parallelParking(1);
+    printf("disconnected\n");
+    close(client);
+
+    return 0;
+}
+
+void autonomousDriving(int forward, int right) {
+
 }
 
 void setHandle(int angle) {
-    if(angle >= 0 + ANGLE_LIMIT && angle <= 180 - ANGLE_LIMIT)
+    if(angle >= MID_ANGLE - ANGLE_LIMIT && angle <= MID_ANGLE + ANGLE_LIMIT)
         setAngle(SERVO_PIN, 180 - angle);
 }
 
 void goForward(int speed) {
-    setDCSpeed(motor[0], 6*speed/5);
-    setDCSpeed(motor[1], speed);
+    setSpeed(speed);
     for(int i=0; i<MOTOR_COUNT; ++i)
         runDCMotor(motor[i], MOTOR_FORWARD);
 }
 
 void goBack(int speed) {
-    setDCSpeed(motor[0], 6*speed/5);
-    setDCSpeed(motor[1], speed);
+    setSpeed(speed);
     for(int i=0; i<MOTOR_COUNT; ++i)
         runDCMotor(motor[i], MOTOR_BACK);
+}
+
+void setSpeed(int speed) {
+    for(int i=0; i<MOTOR_COUNT; ++i)
+        setDCSpeed(motor[i], speed);
 }
 
 void stop() {
@@ -128,20 +188,14 @@ void parallelParking(int mode) {
 
 void parking(int isParallel) {
     if(isParallel == 1) {
-        /*
-        setHandle(MID_ANGLE + 60);
+        setHandle(MID_ANGLE + 75);
         goBack(PARKING_SPEED);
-        usleep(3000 * 1000);
-
-        setHandle(MID_ANGLE - 60);
+        usleep(1400 * 1000);
+        setHandle(MID_ANGLE - 75);
         goBack(PARKING_SPEED);
-        usleep(5000 * 1000);
-
+        usleep(2800 * 1000);
         goForward(PARKING_SPEED);
-        usleep(2000 * 1000);
-        */
-        int turnAngle = MID_ANGLE + 60;
-
+        usleep(300 * 1000);
     }
     else if(isParallel == 0) {
 
