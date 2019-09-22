@@ -2,6 +2,7 @@
 // Created by Hwiyong on 2019-08-23.
 //
 
+// sudo apt install libbluetooth-dev
 // gcc -o auto.o auto.c dc_motor.c servo_motor.c ultrasonic.c bluetooth.c -lwiringPi -lpthread -lbluetooth
 
 #include <stdio.h>
@@ -21,8 +22,8 @@
 // servo motor
 #define SERVO_PIN 1			// BCM 18
 #define ANGLE_LIMIT 70
-#define ANGLE_GAP 5
-#define MID_ANGLE 100
+#define ANGLE_GAP 15
+#define MID_ANGLE 95
 
 // ultrasonic
 #define ULTRASONIC_COUNT 6
@@ -38,6 +39,8 @@
 #define ULTRASONIC_BACK_CENTER_ECHO 2	    // BCM 27
 #define ULTRASONIC_BACK_RIGHT_TRIG 5	    // BCM 24
 #define ULTRASONIC_BACK_RIGHT_ECHO 4	    // BCM 23
+
+#define CRASH_DISTANCE 30   // 30cm
 
 void *function(void *argument);
 void autonomousDriving(int forward, int right);
@@ -103,14 +106,21 @@ void *function(void *argument) {
         if(key == 'm')
             autoMode ^= 1;
         else if(autoMode == 1) {
-            int forwardValue, rightValue;
+            int numberCount = 0, forwardValue = 0, rightValue = 0, value;
             char *ptr = strtok(recv_message, ",");
             while (ptr != NULL) {
-                printf("%s\n", ptr);
-                ptr = strtok(NULL, " ");
+                value = atoi(ptr);
+                switch(numberCount) {
+                    case 0 : forwardValue += value; break;
+                    case 1 : forwardValue -= value; break;
+                    case 2 : rightValue -= value; break;
+                    case 3 : rightValue += value; break;
+                }
+                ++numberCount;
+                ptr = strtok(NULL, ",");
             }
-            // 자동 모드 알고리즘 추가
-            //autonomousDriving(forwardValue, rightValue);
+            if(abs(forwardValue) >= abs(rightValue))
+                autonomousDriving(forwardValue, rightValue);
         }
         else if(autoMode == 0){
             if (key == 'p') {
@@ -135,15 +145,52 @@ void *function(void *argument) {
             }
         }
     }
-    //parallelParking(1);
+    stop();
     printf("disconnected\n");
     close(client);
-
     return 0;
 }
 
 void autonomousDriving(int forward, int right) {
-
+    int scoreChart[6][2] = {{-1, -1}, {-1, 0}, {-1, 1}, {1, -1}, {1, 0}, {1, 1}};
+    int score = abs(forward) + abs(right), repeat = 0;
+    while((forward != 0 || right != 0) && repeat < 100) {
+        printf("%d %d\n", forward, right);
+        workUltrasonic();
+        int selectIndex = -1;
+        for(int i=0; i<6; ++i) {
+            if(((i < 3 && ultrasonicDistance[1] > CRASH_DISTANCE) || (i >= 3 && ultrasonicDistance[4] > CRASH_DISTANCE)) && (ultrasonicDistance[i] > CRASH_DISTANCE)) {
+                int testScore = abs(forward + scoreChart[i][0]) + abs(right + scoreChart[i][1]);
+                if(testScore < score) {
+                    selectIndex = i;
+                    score = testScore;
+                }
+            }
+        }
+        if(selectIndex > -1) {
+            if(scoreChart[selectIndex][1] == -1) {
+                setHandle(MID_ANGLE - ANGLE_GAP);
+            }
+            else if(scoreChart[selectIndex][1] == 1) {
+                setHandle(MID_ANGLE + ANGLE_GAP);
+            }
+            if(scoreChart[selectIndex][0] == -1) {
+                goForward(INIT_SPEED);
+            }
+            else if(scoreChart[selectIndex][0] == 1) {
+                goBack(INIT_SPEED);
+            }
+            forward += scoreChart[selectIndex][0];
+            right += scoreChart[selectIndex][1];
+        }
+        else {
+            ++repeat;
+            stop();
+        }
+        delay(50);
+    }
+    stop();
+    //parallelParking(1);
 }
 
 void setHandle(int angle) {
@@ -198,7 +245,7 @@ void parking(int isParallel) {
         usleep(300 * 1000);
     }
     else if(isParallel == 0) {
-
+        // vertical parking(deprecated)
     }
     setHandle(MID_ANGLE);
     stop();
