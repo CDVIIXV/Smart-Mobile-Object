@@ -1,4 +1,4 @@
-# *SmartMobileObject RPI3B+*
+# **SmartMobileObject RPI3B+**
 
 ## 1st floor(Hwiyong Chang) - Steering device(3Dprinter), DC motor(Adafruit DC & Stepper Motor HAT) and ultrasonic(RPI)
 
@@ -12,7 +12,7 @@
 #### HC-SR04 x6
 ![ex_screenshot](./image/HC-SR04.jpg)
 
-#### Servo Motor x1 (Steering)
+#### Servo Motor x1 (for Steering)
 ![ex_screenshot](./image/Servo_Motor.jpg)
 
 #### DC Motor x2 (Forward, Backward)
