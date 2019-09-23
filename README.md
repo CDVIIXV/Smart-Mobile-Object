@@ -1,6 +1,6 @@
-# SmartMobileObject RPI3B+
+# *SmartMobileObject RPI3B+*
 
-# 1st floor(Hwiyong Chang) - Steering device(3Dprinter), DC motor(Adafruit DC & Stepper Motor HAT) and ultrasonic(RPI)
+## 1st floor(Hwiyong Chang) - Steering device(3Dprinter), DC motor(Adafruit DC & Stepper Motor HAT) and ultrasonic(RPI)
 
 ### Devices
 #### Raspberry Pi 3 Model B+
@@ -19,6 +19,6 @@
 ![ex_screenshot](./image/DC_Motor.jpg)
 
 
-# 2nd floor(GangHo Lee) - Camera(RPI)
+## 2nd floor(GangHo Lee) - Camera(RPI)
 
-# 3rd floor(Inuk Choi) - Lidar(RPI)
+## 3rd floor(Inuk Choi) - Lidar(RPI)
