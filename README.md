@@ -18,6 +18,15 @@
 #### DC Motor x2 (Forward, Backward)
 ![ex_screenshot](./image/DC_Motor.jpg)
 
+#### Steering Device
+![ex_screenshot](./image/Steering_Device.jpg)
+
+#### Smart Moblie Object (Top view)
+![ex_screenshot](./image/Assemble_TopView.jpg)
+
+#### Smart Moblie Object (Side view)
+![ex_screenshot](./image/Assemble_SideView.jpg)
+
 
 ## 2nd floor(GangHo Lee) - Camera(RPI)
 
