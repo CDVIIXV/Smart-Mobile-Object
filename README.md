@@ -7,7 +7,7 @@
 ![ex_screenshot](./image/RPI3B+.jpg)
 
 #### Adafruit DC & Stepper Motor HAT
-![ex_screenshot](./image/Adafruit DC & Stepper Motor HAT.jpg)
+![ex_screenshot](./image/'Adafruit DC & Stepper Motor HAT.jpg')
 
 #### HC-SR04 x6
 ![ex_screenshot](./image/HC-SR04.jpg)
