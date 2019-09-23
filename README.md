@@ -7,16 +7,16 @@
 ![ex_screenshot](./image/RPI3B+.jpg)
 
 #### Adafruit DC & Stepper Motor HAT
-![ex_screenshot](./image/'Adafruit DC & Stepper Motor HAT.jpg')
+![ex_screenshot](./image/AdafruitDC&StepperMotorHAT.jpg)
 
 #### HC-SR04 x6
 ![ex_screenshot](./image/HC-SR04.jpg)
 
 #### Servo Motor x1 (Steering)
-![ex_screenshot](./image/Servo Motor.jpg)
+![ex_screenshot](./image/Servo_Motor.jpg)
 
 #### DC Motor x2 (Forward, Backward)
-![ex_screenshot](./image/DC Motor.jpg)
+![ex_screenshot](./image/DC_Motor.jpg)
 
 
 # 2nd floor(GangHo Lee) - Camera(RPI)
