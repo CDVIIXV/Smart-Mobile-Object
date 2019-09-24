@@ -27,8 +27,12 @@
 #### Complete : Smart Moblie Object (Side view)
 ![ex_screenshot](./image/Assemble_SideView.jpg)
 
-### Software
-Ras
+### Execute Software 
+
+#### install Raspbian in Raspberry Pi
+#### **pi@raspberrypi:~ $ ** git clone https://github.com/CDVIIXV/SmartMobileObject-RPI3Bplus
+#### gcc -o auto.o auto.c dc_motor.c servo_motor.c ultrasonic.c bluetooth.c -lwiringPi -lbluetooth -lpthread
+#### sudo ./auto.o
 
 
 ## 2nd floor(GangHo Lee) - Camera(RPI)
