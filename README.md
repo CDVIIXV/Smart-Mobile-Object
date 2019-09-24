@@ -3,19 +3,19 @@
 ## 1st floor(Hwiyong Chang) - Steering device(3Dprinter), DC motor(Adafruit DC & Stepper Motor HAT) and ultrasonic(RPI)
 
 ### Devices
-#### 1.Raspberry Pi 3 Model B+ x1
+#### 1. Raspberry Pi 3 Model B+ x1
 ![ex_screenshot](./image/RPI3B+.jpg)
 
-#### 2.Adafruit DC & Stepper Motor HAT x1
+#### 2. Adafruit DC & Stepper Motor HAT x1
 ![ex_screenshot](./image/AdafruitDC&StepperMotorHAT.jpg)
 
-#### 3.HC-SR04 x6
+#### 3. HC-SR04 x6
 ![ex_screenshot](./image/HC-SR04.jpg)
 
-#### 4.Servo Motor x1 (for Steering)
+#### 4. Servo Motor x1 (for Steering)
 ![ex_screenshot](./image/Servo_Motor.jpg)
 
-#### 5.DC Motor x2 (Forward, Backward)
+#### 5. DC Motor x2 (Forward, Backward)
 ![ex_screenshot](./image/DC_Motor.jpg)
 
 #### Complete : Steering Device
