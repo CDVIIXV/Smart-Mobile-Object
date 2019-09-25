@@ -40,9 +40,11 @@
 
 **pi@raspberrypi:~$** sudo apt install libbluetooth-dev
 
-**pi@raspberrypi:~$** sudo apt install gedit
+**pi@raspberrypi:~$** sudo nano /etc/systemd/system/dbus-org.bluez.service
 
-**pi@raspberrypi:~$** sudo gedit /etc/systemd/system/dbus-org.bluez.service
+*add "--compat" word behind this line :* ExecStart=/usr/lib/bluetooth/bluetoothd --compat
+
+**pi@raspberrypi:~$** sudo reboot
 
 #### Excute
 **pi@raspberrypi:~$** git clone https://github.com/CDVIIXV/SmartMobileObject-RPI3Bplus
