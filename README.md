@@ -35,16 +35,22 @@
 #### Configuration
 ##### install Raspbian in Raspberry Pi
 **pi@raspberrypi:~$** sudo apt update
+
 **pi@raspberrypi:~$** sudo apt upgrade
+
 **pi@raspberrypi:~$** sudo apt install libbluetooth-dev
+
 **pi@raspberrypi:~$** sudo apt install gedit
+
 **pi@raspberrypi:~$** sudo gedit /etc/systemd/system/dbus-org.bluez.service
 
 #### Excute
 **pi@raspberrypi:~$** git clone https://github.com/CDVIIXV/SmartMobileObject-RPI3Bplus
 
 **pi@raspberrypi:~$** cd SmartMobileObject-RPI3Bplus/Move/
+
 **pi@raspberrypi:~SmartMobileObject-RPI3Bplus/Move/$** gcc -o auto.o auto.c dc_motor.c servo_motor.c ultrasonic.c bluetooth.c -lwiringPi -lbluetooth -lpthread
+
 **pi@raspberrypi:~SmartMobileObject-RPI3Bplus/Move/$** sudo ./auto.o
 
 
