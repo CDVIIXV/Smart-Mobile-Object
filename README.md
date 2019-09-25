@@ -42,6 +42,7 @@
 
 #### Excute
 **pi@raspberrypi:~$** git clone https://github.com/CDVIIXV/SmartMobileObject-RPI3Bplus
+
 **pi@raspberrypi:~$** cd SmartMobileObject-RPI3Bplus/
 **pi@raspberrypi:~SmartMobileObject-RPI3Bplus/$** cd Move/
 **pi@raspberrypi:~SmartMobileObject-RPI3Bplus/$** sudo apt install libbluetooth-dev
