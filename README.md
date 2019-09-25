@@ -42,7 +42,7 @@
 
 **pi@raspberrypi:~$** sudo nano /etc/systemd/system/dbus-org.bluez.service
 
-*add "--compat" word behind this line :* ExecStart=/usr/lib/bluetooth/bluetoothd --compat
+*add "--compat" word behind this line :* ExecStart=/usr/lib/bluetooth/bluetoothd **--compat**
 
 **pi@raspberrypi:~$** sudo reboot
 
