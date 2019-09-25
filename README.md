@@ -42,9 +42,8 @@
 
 #### Excute
 **pi@raspberrypi:~$** git clone https://github.com/CDVIIXV/SmartMobileObject-RPI3Bplus
-**pi@raspberrypi:~$** cd SmartMobileObject-RPI3Bplus/
-**pi@raspberrypi:~SmartMobileObject-RPI3Bplus/$** cd Move/
-**pi@raspberrypi:~SmartMobileObject-RPI3Bplus/$** sudo apt install libbluetooth-dev
+
+**pi@raspberrypi:~$** cd SmartMobileObject-RPI3Bplus/Move/
 **pi@raspberrypi:~SmartMobileObject-RPI3Bplus/Move/$** gcc -o auto.o auto.c dc_motor.c servo_motor.c ultrasonic.c bluetooth.c -lwiringPi -lbluetooth -lpthread
 **pi@raspberrypi:~SmartMobileObject-RPI3Bplus/Move/$** sudo ./auto.o
 
