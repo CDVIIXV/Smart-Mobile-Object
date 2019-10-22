@@ -1,4 +1,4 @@
-# **SmartMobileObject RPI3B+**
+# **Smart Mobile Object RPI 3B+**
 
 ## 1st floor(Hwiyong Chang) - Steering device(3Dprinter), DC motor(Adafruit DC & Stepper Motor HAT) and ultrasonic(RPI)
 
